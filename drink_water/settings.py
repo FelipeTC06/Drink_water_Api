@@ -25,7 +25,12 @@ SECRET_KEY = 'django-insecure-xf%4=pbzm+48(6o((l_@e*wrc69#@4j_vdkq63e14yz1mcchr6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'drink-water-api.onrender.com',
+]
+
 
 
 # Application definition
