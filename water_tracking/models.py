@@ -11,7 +11,8 @@ class WaterIntake(models.Model):
         return f'{self.user.fullname} - {self.intake_ml}ml on {self.date}'
 
     def calculate_daily_goal(self):
-        return self.user.weight * 35
+        daily_goal = self.user.weight * 35
+        return min(daily_goal, 5000)
 
     def total_intake_today(self):
         total = WaterIntake.objects.filter(user=self.user, date=timezone.now().date()).aggregate(models.Sum('intake_ml'))['intake_ml__sum'] or 0
