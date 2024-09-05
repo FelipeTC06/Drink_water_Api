@@ -15,4 +15,4 @@ class User_Auth(models.Model):
         super(User_Auth, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.fullname
+        return str(self.id)

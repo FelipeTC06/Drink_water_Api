@@ -12,7 +12,7 @@ def register(request):
     weight = request.data.get('weight')
     
     if User_Auth.objects.filter(email=email).exists():
-        return Response({'error': 'Email já está em uso.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': 'Email já está em uso.'}, status=status.HTTP_400_BAD_REQUEST)
     
     user = User_Auth.objects.create(
         email=email,
@@ -32,9 +32,9 @@ def login(request):
     try:
         user = User_Auth.objects.get(email=email)
     except User_Auth.DoesNotExist:
-        return Response({'error': 'Usuário não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'message': 'Usuário ou Senha incorretos'}, status=status.HTTP_404_NOT_FOUND)
     
     if check_password(password, user.password):
-        return Response({'message': 'Login realizado com sucesso!'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Login realizado com sucesso!', 'id': user.id}, status=status.HTTP_200_OK)
     else:
-        return Response({'error': 'Senha incorreta.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': 'Usuário ou Senha incorretos'}, status=status.HTTP_400_BAD_REQUEST)
