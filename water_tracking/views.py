@@ -48,8 +48,9 @@ def daily_progress(request, user_id):
 @api_view(['GET'])
 def intake_history(request, user_id):
     user = User_Auth.objects.get(id=user_id)
-    daily_goal = int(user.weight) * 35  # Meta diária baseada no peso do usuário
-
+    calculated_goal = int(user.weight) * 35
+    daily_goal = min(calculated_goal, 5000) 
+    
     # Agrupar por data, somar intake_ml e verificar se a meta foi atingida, ordenar por data decrescente
     history = WaterIntake.objects.filter(user=user) \
         .extra(select={'date': 'date(date)'}) \
