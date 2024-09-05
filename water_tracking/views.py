@@ -22,18 +22,22 @@ def daily_progress(request, user_id):
     except User_Auth.DoesNotExist:
         return Response({'error': 'Usuário não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
 
-    daily_goal = int(user.weight) * 35
+    daily_goal = int(user.weight) * 35 
+    max_intake = 5000
 
     today = timezone.now().date()
     total_intake = WaterIntake.objects.filter(user=user, date=today).aggregate(Sum('intake_ml'))['intake_ml__sum'] or 0
 
     remaining = max(0, daily_goal - total_intake)
 
+    max_reached = total_intake >= max_intake
+
     data = {
         'daily_goal': daily_goal,
         'total_intake': total_intake,
         'remaining': remaining,
         'goal_achieved': total_intake >= daily_goal,
+        'max_intake_reached': max_reached,
     }
 
     return Response(data, status=status.HTTP_200_OK)
