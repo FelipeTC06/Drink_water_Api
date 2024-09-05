@@ -27,6 +27,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     'drink-water-api.onrender.com',
+    'https://water-tracking.netlify.app',
 ]
 
 
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'user_auth',
     'water_tracking',
 ]
@@ -53,6 +55,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200",
+    "https://water-tracking.netlify.app",
 ]
 
 ROOT_URLCONF = 'drink_water.urls'
