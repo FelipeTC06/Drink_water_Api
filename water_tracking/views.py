@@ -22,7 +22,8 @@ def daily_progress(request, user_id):
     except User_Auth.DoesNotExist:
         return Response({'error': 'Usuário não encontrado.'}, status=status.HTTP_404_NOT_FOUND)
 
-    daily_goal = int(user.weight) * 35 
+    calculated_goal = int(user.weight) * 35
+    daily_goal = min(calculated_goal, 5000) 
     max_intake = 5000
 
     today = timezone.now().date()
