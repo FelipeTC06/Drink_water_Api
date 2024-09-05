@@ -39,9 +39,38 @@ def daily_progress(request, user_id):
     return Response(data, status=status.HTTP_200_OK)
 
 
+
 @api_view(['GET'])
 def intake_history(request, user_id):
     user = User_Auth.objects.get(id=user_id)
-    history = WaterIntake.objects.filter(user=user).values('date', 'intake_ml')
+    daily_goal = int(user.weight) * 35  # Meta diária baseada no peso do usuário
 
-    return Response(history)
+    # Agrupar por data, somar intake_ml e verificar se a meta foi atingida, ordenar por data decrescente
+    history = WaterIntake.objects.filter(user=user) \
+        .extra(select={'date': 'date(date)'}) \
+        .values('date') \
+        .annotate(total_intake=Sum('intake_ml')) \
+        .order_by('-date')  # Ordenar por data mais recente
+
+    # Preparar a resposta com informações diárias
+    detailed_history = []
+
+    for entry in history:
+        total_intake = entry['total_intake']
+        goal_achieved = total_intake >= daily_goal
+
+        detailed_history.append({
+            'date': entry['date'],
+            'intake_ml': total_intake,
+            'daily_goal': daily_goal,
+            'goal_achieved': goal_achieved
+        })
+
+    return Response(detailed_history, status=status.HTTP_200_OK)
+
+
+
+
+
+
+
